@@ -9,6 +9,12 @@ import os
 
 
 def optimal_cluster(dataset):
+    ''' Uses sum of squared distance/elbow methd to find the intertia of eaah cluster. 
+    Then compares the change in inertia to find the ideal number of clusters based on the graph.
+    Returns k_value (cluster number) to be used in the kmeans function. 
+        Parameters: 
+            dataset: image in the form of pixel values 
+    ''' 
     inertia = []
     K = range(1,10) #maximum of 10 clusters being considered 
     
@@ -39,6 +45,14 @@ def optimal_cluster(dataset):
     return k_value
 
 def masking(k_value, labels, dataset, image, image_path): 
+    ''' Masks all clusters but one by turning those clusters black. 
+    Saves final masked image to output folder. 
+        Parameters: 
+            k_value: number of clusters
+            labels: label array returned by cv2.kmeans
+            dataset: image in the form of pixel values 
+            image: original image to access its shape
+            image_path: input path of original image '''
     masked_image = np.copy(dataset) 
     
     masked_image = masked_image.reshape((-1, 3)) # convert to the shape of pixel values
@@ -57,6 +71,11 @@ def masking(k_value, labels, dataset, image, image_path):
     cv2.imwrite(output_path, masked_image)
 
 def main():
+    ''' Saves image input path. 
+    Processes image to prepare it for the cv2.kmeans method. 
+    Calls the optimal_cluster() method to find the number of clusters and partition image. 
+    Segments image. 
+    Calls masking() method to mask segmented image. '''
     Tk().withdraw()
     image_path = askopenfilename()
     image = cv2.imread(image_path)
