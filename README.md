@@ -13,7 +13,9 @@ This program uses k-means clustering algorithm to partition the input image into
     #plt.show() 
 
 ```
-After segmenting the image every cluster but one is masked to black. After testing the clusters I saw that the bin cluster was consistently the 3rd one. This method of masking is not ideal, and further discussed below.  
+After segmenting the image every cluster but one is masked to black. After testing the clusters I saw that the bin cluster was consistently the 3rd one. This method of masking is not ideal, and further discussed below. The code is able to segment some images perfectly, while struggling to segment images with more difficult lighting conditions and positioning (examples below for image 4.8 and 8.5)
+![image](goodexample.png)
+![image](badexample.png)
 
 ## How to run my code
 Required Libraries: numpy, matplotlib, cv2, scikit-learn

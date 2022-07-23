@@ -15,6 +15,7 @@ def optimal_cluster(dataset):
         Parameters: 
             dataset: image in the form of pixel values 
     ''' 
+    print("Finding cluster number....")
     inertia = []
     K = range(1,10) #maximum of 10 clusters being considered 
     
@@ -76,27 +77,22 @@ def main():
     Calls the optimal_cluster() method to find the number of clusters and partition image. 
     Segments image. 
     Calls masking() method to mask segmented image. '''
-    Tk().withdraw()
-    image_path = askopenfilename()
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    pixel_values = image.reshape((-1, 3))
+    #Tk().withdraw() #close tk root window
+    image_path = askopenfilename() #ask user to select image
+    image = cv2.imread(image_path) #read image from file path
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) #conver to RGB
+    pixels = image.reshape((-1, 3)) #reshape to a 2D array of pixels with RGB values
 
-    pixel_values = np.float32(pixel_values) # convert to float as required by cv2.kmeans
-    # setting stopping criteria
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.2)
-    k = optimal_cluster(pixel_values) #detect optimal number of clusters
-    _, labels, (centers) = cv2.kmeans(pixel_values, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    pixels = np.float32(pixels) # convert to float as required by cv2.kmeans
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.2) #set stoppping criteria 
+    k = optimal_cluster(pixels) #detect optimal number of clusters
+    _, labels, (centers) = cv2.kmeans(pixels, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS) #implement kmeans algorithm
     centers = np.uint8(centers) #convert back to 8 bit values
 
-    ## flatten the labels array
-    labels = labels.flatten()
-    ## convert all pixels to the color of the centroids
-    segmented_image = centers[labels.flatten()]
-    segmented_image = segmented_image.reshape(image.shape)
-    #plt.imshow(segmented_image, interpolation='none',cmap=plt.cm.jet,origin='upper' ) #show the clustered image as a colormap
-    #plt.show()
-    masking(k, labels, pixel_values, image, image_path) #mask undesired portions
+    labels = labels.flatten() #flatten the labels array returned by kmeans
+    segmented_image = centers[labels.flatten()] #convert all pixels to the color of the cluster centers
+    segmented_image = segmented_image.reshape(image.shape) #reshape segmented image to the original shape
+    masking(k, labels, pixels, image, image_path) #mask undesired portions
     
 
 if __name__ == "__main__":
