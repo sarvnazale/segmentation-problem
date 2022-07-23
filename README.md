@@ -18,8 +18,8 @@ After segmenting the image every cluster but one is masked to black. After testi
 ![image](badexample.png)
 
 ## How to run my code
-Required Libraries: numpy, matplotlib, cv2, scikit-learn
-Additional Libraries: tkinter, os
+Required Libraries: numpy, matplotlib, cv2, scikit-learn.
+Additional Libraries: tkinter, os. 
 Run segment.py and choose an input image when prompted to do so. The output image is saved under the output folder. 
 
 ## Issues/Next Steps 
